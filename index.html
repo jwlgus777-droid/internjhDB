@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>한국자활복지개발원 취업도전형 사업단 인턴처 DB</title>
+  <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              navy: '#0f2b48',
+              blue: '#1e60c6',
+              lightBlue: '#e8f1fc',
+              emerald: '#059669',
+              emeraldLight: '#ecfdf5',
+              dark: '#0a192f'
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased flex flex-col min-h-screen">
+
+  <!-- ========================================================
+       1. 최상단 공식 헤더
+       ======================================================== -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        <!-- 로고 및 사이트명 -->
+        <div class="flex items-center space-x-4">
+          <a href="index.html" class="flex items-center space-x-3 group">
+            <img src="assets/logo.png" alt="한국자활복지개발원 로고" class="h-10 sm:h-12 w-auto object-contain">
+            <div class="border-l border-slate-300 pl-3.5 hidden sm:block">
+              <span class="text-xs font-semibold text-brand-blue tracking-wider block">취업도전형 사업단</span>
+              <span class="text-lg sm:text-xl font-extrabold text-slate-900 tracking-tight">인턴처 DB</span>
+            </div>
+          </a>
+        </div>
+
+        <!-- 메인 네비게이션 탭 -->
+        <nav class="hidden md:flex items-center space-x-1 lg:space-x-2">
+          <button id="navTabInterns" onclick="switchMainTab('interns')" class="px-4 py-2 rounded-lg text-sm font-bold text-brand-blue bg-blue-50 transition-all flex items-center space-x-1.5">
+            <i class="fa-solid fa-briefcase"></i>
+            <span>인턴처 검색</span>
+          </button>
+          <button id="navTabNotices" onclick="switchMainTab('notices')" class="px-4 py-2 rounded-lg text-sm font-semibold text-slate-600 hover:text-brand-blue hover:bg-slate-100 transition-all flex items-center space-x-1.5">
+            <i class="fa-solid fa-bullhorn"></i>
+            <span>공지사항</span>
+          </button>
+          <button id="navTabQna" onclick="switchMainTab('qna')" class="px-4 py-2 rounded-lg text-sm font-semibold text-slate-600 hover:text-brand-blue hover:bg-slate-100 transition-all flex items-center space-x-1.5">
+            <i class="fa-solid fa-circle-question"></i>
+            <span>Q&amp;A 문의</span>
+          </button>
+        </nav>
+
+        <!-- 관리자 페이지 바로가기 링크 -->
+        <div class="flex items-center space-x-3">
+          <a href="admin.html" class="inline-flex items-center px-3.5 py-2 text-xs sm:text-sm font-semibold rounded-lg text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-300 transition-all shadow-sm">
+            <i class="fa-solid fa-lock text-slate-500 mr-1.5"></i>
+            <span>관리자 페이지</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================================
+       2. 히어로 배너 (Hero Section)
+       ======================================================== -->
+  <section class="bg-gradient-to-r from-slate-900 via-brand-navy to-blue-900 text-white py-10 px-4 sm:px-6 lg:px-8 relative overflow-hidden no-print">
+    <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:16px_16px]"></div>
+    <div class="max-w-7xl mx-auto relative z-10">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <!-- 텍스트 영역 -->
+        <div class="lg:col-span-8">
+          <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-blue-500/20 text-blue-200 border border-blue-400/30 text-xs font-medium mb-3">
+            <i class="fa-solid fa-award"></i>
+            <span>보건복지부 산하 공공기관 · 한국자활복지개발원</span>
+          </div>
+          <h1 class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-white mb-3">
+            자활 참여자를 위한 맞춤형 인턴처 찾기
+          </h1>
+          <p class="text-slate-200 text-sm sm:text-base max-w-2xl leading-relaxed mb-6">
+            검증된 전국 공공기관 및 우수 자활기업의 일터 정보를 제공합니다. 직무와 지역별 맞춤 인턴처를 검색하고 실시간 매칭을 신청해보세요.
+          </p>
+          
+          <!-- 원클릭 빠른 검색바 -->
+          <div class="bg-white/10 backdrop-blur-md p-2 rounded-xl border border-white/20 max-w-2xl shadow-xl flex items-center">
+            <div class="flex-1 flex items-center pl-3">
+              <i class="fa-solid fa-magnifying-glass text-slate-300 mr-2.5"></i>
+              <input type="text" id="quickSearchInput" onkeyup="if(event.key==='Enter') applyQuickSearch()" placeholder="기업명, 직무(조리, 배송, 청소 등), 근무지역 검색..." class="bg-transparent border-none text-white placeholder-slate-300 text-sm focus:outline-none w-full">
+            </div>
+            <button onclick="applyQuickSearch()" class="bg-brand-blue hover:bg-blue-600 text-white px-5 py-2.5 rounded-lg text-sm font-bold shadow-md transition-all flex items-center space-x-1.5 shrink-0">
+              <span>검색하기</span>
+              <i class="fa-solid fa-arrow-right text-xs"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- 핵심 통계 카운터 카드 -->
+        <div class="lg:col-span-4 grid grid-cols-2 gap-3 sm:gap-4">
+          <div class="bg-white/10 backdrop-blur-md p-4 rounded-xl border border-white/15 text-center">
+            <div class="text-slate-300 text-xs font-medium mb-1">총 등록 인턴처</div>
+            <div id="heroTotalCount" class="text-2xl sm:text-3xl font-black text-white">258<span class="text-xs font-normal text-slate-300 ml-1">개소</span></div>
+          </div>
+          <div class="bg-white/10 backdrop-blur-md p-4 rounded-xl border border-white/15 text-center">
+            <div class="text-emerald-300 text-xs font-medium mb-1">현재 모집중</div>
+            <div id="heroActiveCount" class="text-2xl sm:text-3xl font-black text-emerald-400">0<span class="text-xs font-normal text-emerald-200 ml-1">개소</span></div>
+          </div>
+          <div class="bg-white/10 backdrop-blur-md p-4 rounded-xl border border-white/15 text-center">
+            <div class="text-blue-300 text-xs font-medium mb-1">총 모집 정원</div>
+            <div id="heroRecruitCapacity" class="text-2xl sm:text-3xl font-black text-blue-300">0<span class="text-xs font-normal text-blue-200 ml-1">명</span></div>
+          </div>
+          <div class="bg-white/10 backdrop-blur-md p-4 rounded-xl border border-white/15 text-center">
+            <div class="text-amber-300 text-xs font-medium mb-1">실시간 매칭 완료</div>
+            <div id="heroMatchedCount" class="text-2xl sm:text-3xl font-black text-amber-300">0<span class="text-xs font-normal text-amber-200 ml-1">명</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       3. 메인 콘텐츠 영역 (동적 탭)
+       ======================================================== -->
+  <main class="main-wrapper max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+    
+    <!-- ========================================
+         TAB 1: 인턴처 검색 & 매칭 (메인)
+         ======================================== -->
+    <div id="tabContentInterns" class="space-y-6">
+
+      <!-- 필터 컨트롤 패널 -->
+      <div class="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 shadow-sm space-y-5">
+        
+        <!-- 검색어 및 기본 정렬 줄 -->
+        <div class="flex flex-col md:flex-row gap-4 items-center justify-between pb-4 border-b border-slate-100">
+          <div class="w-full md:w-2/3 relative">
+            <i class="fa-solid fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+            <input type="text" id="filterKeyword" oninput="debounceFilter()" placeholder="인턴처명, 상세 직무, 업종, 주소(시군구) 등 자유롭게 검색" class="w-full pl-11 pr-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:bg-white focus:border-brand-blue focus:ring-2 focus:ring-blue-100 transition-all">
+          </div>
+          
+          <div class="flex items-center space-x-3 w-full md:w-auto justify-end">
+            <!-- 정렬 옵션 -->
+            <select id="filterSortBy" onchange="renderInternships()" class="bg-slate-50 border border-slate-300 text-slate-700 text-xs sm:text-sm rounded-lg px-3 py-2.5 focus:border-brand-blue focus:ring-1 focus:ring-brand-blue">
+              <option value="id_asc">등록 순서순</option>
+              <option value="recruit_desc">모집인원 많은순</option>
+              <option value="name_asc">기업명 가나다순</option>
+              <option value="match_asc">매칭 여유인원 많은순</option>
+            </select>
+
+            <!-- 초기화 버튼 -->
+            <button onclick="resetFilters()" class="px-3.5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg text-xs sm:text-sm font-semibold transition-all flex items-center space-x-1">
+              <i class="fa-solid fa-rotate-right"></i>
+              <span>필터 초기화</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 지역(권역) 필터 칩 -->
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-bold text-slate-600 uppercase tracking-wider flex items-center">
+              <i class="fa-solid fa-location-dot text-brand-blue mr-1.5"></i> 지역별 필터 (발굴 권역)
+            </span>
+            <span class="text-xs text-slate-400">다중 클릭으로 즉시 검색</span>
+          </div>
+          <div id="regionChipsContainer" class="flex flex-wrap gap-1.5 sm:gap-2">
+            <!-- 동적 지역 칩 (전체, 강원, 경기, 대구, 서울, 부산 등) -->
+          </div>
+        </div>
+
+        <!-- 3열 세부 필터 (인턴 구분, 직무 카테고리, 모집 상태, 기업 구분) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-3 border-t border-slate-100 text-xs sm:text-sm">
+          <!-- 인턴 구분 -->
+          <div>
+            <label class="block text-xs font-bold text-slate-600 mb-1.5">
+              <i class="fa-solid fa-id-badge text-brand-blue mr-1"></i> 인턴(사업단) 구분
+            </label>
+            <select id="filterInternType" onchange="renderInternships()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-slate-700 focus:bg-white focus:border-brand-blue">
+              <option value="전체">전체 구분</option>
+              <option value="직접전환형">직접전환형 (6개월~최대 3년)</option>
+              <option value="체험형">체험형 (2~6개월)</option>
+            </select>
+          </div>
+
+          <!-- 직무 카테고리 -->
+          <div>
+            <label class="block text-xs font-bold text-slate-600 mb-1.5">
+              <i class="fa-solid fa-list-check text-brand-blue mr-1"></i> 직무 카테고리
+            </label>
+            <select id="filterJobCategory" onchange="renderInternships()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-slate-700 focus:bg-white focus:border-brand-blue">
+              <option value="전체">전체 직무</option>
+              <option value="사무·행정">사무·행정 보조</option>
+              <option value="조리·외식">조리·외식·주방</option>
+              <option value="제과·제빵">제과·제빵</option>
+              <option value="카페·바리스타">카페·바리스타</option>
+              <option value="배송·물류">배송·물류·운전</option>
+              <option value="청소·방역">청소·방역·소독</option>
+              <option value="건축·집수리">건축·집수리·인테리어</option>
+              <option value="돌봄·사회서비스">돌봄·사회서비스·요양</option>
+              <option value="유통·판매">유통·판매(편의점/마트)</option>
+              <option value="제조·생산">제조·가공·생산</option>
+            </select>
+          </div>
+
+          <!-- 모집 상태 -->
+          <div>
+            <label class="block text-xs font-bold text-slate-600 mb-1.5">
+              <i class="fa-solid fa-circle-check text-brand-blue mr-1"></i> 모집 상태
+            </label>
+            <select id="filterStatus" onchange="renderInternships()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-slate-700 focus:bg-white focus:border-brand-blue">
+              <option value="전체">전체 (모집중 + 마감)</option>
+              <option value="모집중" selected>모집중만 보기</option>
+              <option value="마감">마감</option>
+            </select>
+          </div>
+
+          <!-- 기업 구분 -->
+          <div>
+            <label class="block text-xs font-bold text-slate-600 mb-1.5">
+              <i class="fa-solid fa-building text-brand-blue mr-1"></i> 기업 구분
+            </label>
+            <select id="filterCompanyType" onchange="renderInternships()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-slate-700 focus:bg-white focus:border-brand-blue">
+              <option value="전체">전체 기업 형태</option>
+              <option value="자활기업">자활기업</option>
+              <option value="법인사업체">법인사업체</option>
+              <option value="개인사업체">개인사업체</option>
+              <option value="공기업">공기업 / 공공기관</option>
+              <option value="기타">기타</option>
+            </select>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 검색 결과 헤더 -->
+      <div class="flex items-center justify-between px-1">
+        <div class="flex items-center space-x-2">
+          <span class="text-sm sm:text-base font-extrabold text-slate-800">검색 결과</span>
+          <span id="resultCountBadge" class="bg-brand-blue text-white text-xs font-bold px-2.5 py-0.5 rounded-full">0건</span>
+          <span class="text-xs text-slate-500 hidden sm:inline">(업로드된 엑셀 정합 데이터 100% 반영)</span>
+        </div>
+
+        <!-- 그리드 / 리스트 뷰 스위처 -->
+        <div class="flex items-center bg-white border border-slate-200 rounded-lg p-1 space-x-1 shadow-sm">
+          <button id="viewBtnGrid" onclick="setViewMode('grid')" class="p-1.5 rounded text-brand-blue bg-blue-50 hover:bg-blue-100 transition-all" title="카드 그리드 뷰">
+            <i class="fa-solid fa-table-cells-large text-sm"></i>
+          </button>
+          <button id="viewBtnList" onclick="setViewMode('list')" class="p-1.5 rounded text-slate-500 hover:text-brand-blue hover:bg-slate-100 transition-all" title="표 리스트 뷰">
+            <i class="fa-solid fa-list text-sm"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- 인턴처 카드 컨테이너 (그리드 뷰) -->
+      <div id="internshipCardsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <!-- JS로 동적 렌더링 -->
+      </div>
+
+      <!-- 인턴처 리스트 컨테이너 (표 뷰) -->
+      <div id="internshipTableContainer" class="hidden bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs sm:text-sm">
+            <thead class="bg-slate-50 text-slate-700 font-bold border-b border-slate-200">
+              <tr>
+                <th class="p-3 text-center">번호</th>
+                <th class="p-3">상태</th>
+                <th class="p-3">인턴구분</th>
+                <th class="p-3">권역</th>
+                <th class="p-3">기업명</th>
+                <th class="p-3">업종</th>
+                <th class="p-3">모집규모</th>
+                <th class="p-3">매칭현황</th>
+                <th class="p-3">실제근무장소</th>
+                <th class="p-3 text-center">관리</th>
+              </tr>
+            </thead>
+            <tbody id="internshipTableBody" class="divide-y divide-slate-100 text-slate-700">
+              <!-- JS로 동적 렌더링 -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 데이터 없음 상태 -->
+      <div id="noDataState" class="hidden bg-white rounded-2xl p-12 text-center border border-slate-200 shadow-sm">
+        <div class="w-16 h-16 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+          <i class="fa-solid fa-search"></i>
+        </div>
+        <h3 class="text-base font-bold text-slate-800 mb-1">조건에 일치하는 인턴처가 없습니다.</h3>
+        <p class="text-sm text-slate-500 mb-4">선택하신 지역 또는 직무 필터를 변경해보시거나 검색어를 완화해보세요.</p>
+        <button onclick="resetFilters()" class="px-4 py-2 bg-brand-blue text-white text-xs font-bold rounded-lg hover:bg-blue-700 transition-all">
+          필터 전체 초기화
+        </button>
+      </div>
+
+    </div>
+
+    <!-- ========================================
+         TAB 2: 공지사항 게시판
+         ======================================== -->
+    <div id="tabContentNotices" class="hidden space-y-6">
+      <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+        <div class="flex items-center justify-between pb-4 mb-4 border-b border-slate-100">
+          <div>
+            <h2 class="text-lg font-extrabold text-slate-900">취업도전형 사업단 공지사항</h2>
+            <p class="text-xs text-slate-500 mt-0.5">사업 참여 및 인턴처 운영에 관한 공식 공지사항입니다. (공지 작성/수정은 관리자 전용입니다)</p>
+          </div>
+          <span class="text-xs bg-slate-100 text-slate-600 px-3 py-1.5 rounded-full font-medium">
+            <i class="fa-solid fa-shield-halved text-brand-blue mr-1"></i> 관리자 인증 게시판
+          </span>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs sm:text-sm">
+            <thead class="bg-slate-50 text-slate-700 font-bold border-b border-slate-200">
+              <tr>
+                <th class="p-3 text-center w-16">번호</th>
+                <th class="p-3">제목</th>
+                <th class="p-3 text-center w-36">작성자</th>
+                <th class="p-3 text-center w-28">등록일</th>
+                <th class="p-3 text-center w-20">조회수</th>
+              </tr>
+            </thead>
+            <tbody id="noticesTableBody" class="divide-y divide-slate-100 text-slate-700">
+              <!-- JS 동적 렌더링 -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================
+         TAB 3: Q&A 문의 게시판
+         ======================================== -->
+    <div id="tabContentQna" class="hidden space-y-6">
+      <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 mb-4 border-b border-slate-100 gap-3">
+          <div>
+            <h2 class="text-lg font-extrabold text-slate-900">자주 묻는 질문 및 문의(Q&amp;A)</h2>
+            <p class="text-xs text-slate-500 mt-0.5">인턴처 지원 및 근무에 대해 궁금한 점을 문의하시면 관리자가 답변해 드립니다.</p>
+          </div>
+          <button onclick="openQnaModal()" class="px-4 py-2 bg-brand-blue hover:bg-blue-700 text-white text-xs sm:text-sm font-bold rounded-lg shadow-sm transition-all flex items-center space-x-1.5 self-start sm:self-auto">
+            <i class="fa-solid fa-pen-to-square"></i>
+            <span>새 질문 등록하기</span>
+          </button>
+        </div>
+
+        <div id="qnaListContainer" class="space-y-4">
+          <!-- JS 동적 렌더링 -->
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ========================================================
+       4. 공식 푸터 (요구사항 필수 반영)
+       ======================================================== -->
+  <footer class="bg-slate-900 text-slate-300 pt-10 pb-8 mt-auto border-t border-slate-800 no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-8 pb-8 border-b border-slate-800">
+        
+        <!-- 기관 소개 -->
+        <div class="md:col-span-5 space-y-3">
+          <div class="flex items-center space-x-3">
+            <img src="assets/logo.png" alt="한국자활복지개발원 로고" class="h-9 w-auto brightness-200 contrast-125">
+            <span class="font-extrabold text-white text-base">한국자활복지개발원</span>
+          </div>
+          <p class="text-xs text-slate-400 leading-relaxed max-w-sm">
+            한국자활복지개발원은 저소득 취약계층의 탈빈곤 및 자립을 지원하여 국민의 삶의 질을 높이고 자활 인프라를 체계적으로 육성하는 공공기관입니다.
+          </p>
+          <div class="text-xs text-slate-400">
+            <span class="font-semibold text-slate-300">주소:</span> 서울특별시 서대문구 통일로 135 한국자활복지개발원
+          </div>
+        </div>
+
+        <!-- 담당자 문의처 (요구사항 필수 명시) -->
+        <div class="md:col-span-4 space-y-2">
+          <h4 class="text-xs font-bold text-white uppercase tracking-wider mb-3">사업 담당자 및 문의처</h4>
+          <div class="bg-slate-800/80 p-3.5 rounded-xl border border-slate-700/80 space-y-1.5 text-xs">
+            <div class="flex items-center text-white font-semibold">
+              <i class="fa-solid fa-user-tie text-blue-400 mr-2 w-4"></i>
+              <span>사업개발부 방지현 대리</span>
+            </div>
+            <div class="flex items-center text-slate-300">
+              <i class="fa-solid fa-phone text-emerald-400 mr-2 w-4"></i>
+              <a href="tel:02-3415-6959" class="hover:text-white transition-colors underline decoration-slate-600">02-3415-6959</a>
+            </div>
+            <div class="flex items-center text-slate-300">
+              <i class="fa-solid fa-envelope text-amber-400 mr-2 w-4"></i>
+              <a href="mailto:julia@kdissw.or.kr" class="hover:text-white transition-colors underline decoration-slate-600">julia@kdissw.or.kr</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 바로가기 링크 및 시스템 안내 -->
+        <div class="md:col-span-3 space-y-2">
+          <h4 class="text-xs font-bold text-white uppercase tracking-wider mb-3">바로가기</h4>
+          <ul class="space-y-1.5 text-xs text-slate-400">
+            <li><a href="https://www.kdissw.or.kr" target="_blank" rel="noopener" class="hover:text-white transition-colors flex items-center"><i class="fa-solid fa-arrow-up-right-from-square text-[10px] mr-1.5"></i>한국자활복지개발원 공식 홈페이지</a></li>
+            <li><a href="admin.html" class="hover:text-white transition-colors flex items-center"><i class="fa-solid fa-shield text-[10px] mr-1.5"></i>관리자 전용 대시보드</a></li>
+            <li><a href="javascript:void(0)" onclick="switchMainTab('notices')" class="hover:text-white transition-colors flex items-center"><i class="fa-solid fa-angle-right text-[10px] mr-1.5"></i>공지사항 게시판</a></li>
+            <li><a href="javascript:void(0)" onclick="switchMainTab('qna')" class="hover:text-white transition-colors flex items-center"><i class="fa-solid fa-angle-right text-[10px] mr-1.5"></i>Q&amp;A 질문 및 답변</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- 카피라이트 -->
+      <div class="pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500">
+        <p>&copy; 2026 한국자활복지개발원 (KDISSW). All rights reserved.</p>
+        <p class="mt-2 sm:mt-0">본 서비스는 첨부된 인턴처 DB 데이터를 기반으로 운영됩니다.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========================================================
+       5. 모달 컴포넌트들
+       ======================================================== -->
+
+  <!-- [모달 1] 인턴처 상세 정보 모달 (29개 컬럼 완벽 열람, 지도, PDF, 매칭) -->
+  <div id="detailModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-3 sm:p-4 overflow-y-auto modal-backdrop">
+    <div class="modal-content bg-white w-full max-w-4xl rounded-2xl shadow-2xl border border-slate-200 overflow-hidden max-h-[90vh] flex flex-col">
+      
+      <!-- 모달 헤더 -->
+      <div class="bg-gradient-to-r from-slate-900 to-brand-navy p-5 text-white flex items-center justify-between shrink-0">
+        <div class="flex items-center space-x-3">
+          <span id="modalHeaderBadge" class="text-xs px-2.5 py-1 rounded-full font-bold bg-emerald-500 text-white">모집중</span>
+          <span id="modalHeaderType" class="text-xs px-2.5 py-1 rounded-full font-semibold bg-blue-600 text-white">직접전환형</span>
+          <h3 id="modalCompanyName" class="text-lg sm:text-xl font-bold truncate">기업명</h3>
+        </div>
+        <button onclick="closeDetailModal()" class="text-slate-300 hover:text-white text-xl p-1 rounded-lg transition-colors">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- 모달 바디 (스크롤 가능) -->
+      <div id="modalPrintArea" class="p-6 overflow-y-auto space-y-6 text-sm flex-1">
+        
+        <!-- 기업 기본 정보 섹션 -->
+        <div>
+          <h4 class="text-xs font-bold text-brand-blue uppercase tracking-wider mb-2 flex items-center">
+            <i class="fa-solid fa-building mr-1.5"></i> 기업 기본 정보
+          </h4>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
+            <div><span class="text-xs text-slate-500 block">기업명</span><strong id="modalCompName" class="text-slate-900 font-bold">-</strong></div>
+            <div><span class="text-xs text-slate-500 block">기업 구분</span><span id="modalCompType" class="text-slate-800">-</span></div>
+            <div><span class="text-xs text-slate-500 block">업종</span><span id="modalIndustry" class="text-slate-800">-</span></div>
+            <div><span class="text-xs text-slate-500 block">기업 규모</span><span id="modalCompScale" class="text-slate-800">-</span></div>
+            <div><span class="text-xs text-slate-500 block">대표자명</span><span id="modalCeo" class="text-slate-800">-</span></div>
+            <div><span class="text-xs text-slate-500 block">대표번호</span><span id="modalCompPhone" class="text-slate-800">-</span></div>
+            <div class="sm:col-span-2 lg:col-span-3">
+              <span class="text-xs text-slate-500 block">주소 (실제 근무장소 포함)</span>
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mt-0.5">
+                <span id="modalAddress" class="text-slate-900 font-medium whitespace-pre-line">-</span>
+                <button id="modalMapBtn" onclick="openNaverMapCurrent()" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold flex items-center space-x-1.5 self-start sm:self-auto shrink-0 shadow-sm transition-all">
+                  <i class="fa-solid fa-map-location-dot"></i>
+                  <span>네이버 지도 보기</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 인턴 모집 요강 섹션 -->
+        <div>
+          <h4 class="text-xs font-bold text-brand-blue uppercase tracking-wider mb-2 flex items-center">
+            <i class="fa-solid fa-clipboard-list mr-1.5"></i> 인턴 모집 요강 및 근무조건
+          </h4>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
+            <div>
+              <span class="text-xs text-slate-500 block">인턴(사업단) 구분</span>
+              <strong id="modalInternType" class="text-brand-blue font-bold">-</strong>
+            </div>
+            <div>
+              <span class="text-xs text-slate-500 block">인턴 모집 규모</span>
+              <strong id="modalRecruitCount" class="text-slate-900 font-bold">-</strong>
+            </div>
+            <div>
+              <span class="text-xs text-slate-500 block">출퇴근 시간</span>
+              <span id="modalWorkHours" class="text-slate-800">-</span>
+            </div>
+            <div>
+              <span class="text-xs text-slate-500 block">주당 근무시간</span>
+              <span id="modalWeeklyHours" class="text-slate-800">-</span>
+            </div>
+            <div>
+              <span class="text-xs text-slate-500 block">근무 기간</span>
+              <span id="modalWorkPeriod" class="text-slate-800">-</span>
+            </div>
+            <div class="sm:col-span-2 lg:col-span-3">
+              <span class="text-xs text-slate-500 block">모집 기한</span>
+              <span id="modalDeadline" class="text-slate-800 font-medium">-</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 상세 직무 및 자격요건 섹션 -->
+        <div>
+          <h4 class="text-xs font-bold text-brand-blue uppercase tracking-wider mb-2 flex items-center">
+            <i class="fa-solid fa-user-check mr-1.5"></i> 직무 내용 및 자격 요건
+          </h4>
+          <div class="space-y-3">
+            <div class="bg-blue-50/50 p-4 rounded-xl border border-blue-100">
+              <span class="text-xs font-bold text-brand-blue block mb-1">직무 상세 기술</span>
+              <p id="modalJobDesc" class="text-slate-800 leading-relaxed whitespace-pre-line text-sm">-</p>
+            </div>
+            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+              <span class="text-xs font-bold text-slate-700 block mb-1">자격 요건 및 우대사항</span>
+              <p id="modalRequirements" class="text-slate-800 leading-relaxed whitespace-pre-line text-sm">-</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 접수 방법 및 담당자 안내 섹션 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- 접수 안내 -->
+          <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+            <h5 class="text-xs font-bold text-slate-700 mb-2 flex items-center">
+              <i class="fa-solid fa-paper-plane mr-1.5 text-brand-blue"></i> 접수 안내
+            </h5>
+            <div class="space-y-2 text-xs">
+              <div><span class="text-slate-500">접수 방법:</span> <strong id="modalApplyMethod" class="text-slate-800">-</strong></div>
+              <div><span class="text-slate-500">접수 세부사항:</span> <span id="modalApplyDetail" class="text-slate-800">-</span></div>
+              <div class="pt-2 border-t border-slate-200">
+                <span class="text-slate-500">인사 담당자:</span>
+                <span id="modalHrInfo" class="text-slate-800 font-medium ml-1">-</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 발굴 기관 및 담당자 -->
+          <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+            <h5 class="text-xs font-bold text-slate-700 mb-2 flex items-center">
+              <i class="fa-solid fa-handshake mr-1.5 text-brand-blue"></i> 인턴처 발굴 담당 기관
+            </h5>
+            <div class="space-y-2 text-xs">
+              <div><span class="text-slate-500">발굴 권역:</span> <span id="modalRegion" class="text-slate-800 font-bold">-</span></div>
+              <div><span class="text-slate-500">발굴 기관명:</span> <strong id="modalFoundOrg" class="text-slate-800">-</strong></div>
+              <div class="pt-2 border-t border-slate-200">
+                <span class="text-slate-500">발굴 담당자:</span>
+                <span id="modalFoundManagerInfo" class="text-slate-800 font-medium ml-1">-</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 실시간 매칭 현황 섹션 -->
+        <div class="bg-emerald-50/60 p-4 rounded-xl border border-emerald-200">
+          <div class="flex items-center justify-between mb-3">
+            <h4 class="text-xs font-bold text-emerald-800 uppercase tracking-wider flex items-center">
+              <i class="fa-solid fa-users text-emerald-600 mr-1.5"></i> 실시간 인턴처-참여자 매칭 현황
+            </h4>
+            <div class="text-xs font-bold text-emerald-700">
+              현재 매칭: <span id="modalCurrentMatchCount" class="text-base font-extrabold text-emerald-800">0</span>명 / 
+              모집규모: <span id="modalRecruitMax" class="font-extrabold text-slate-800">0</span>명
+            </div>
+          </div>
+          
+          <div id="modalMatchListContainer" class="space-y-1.5">
+            <!-- 매칭 참여자 리스트 동적 삽입 -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 모달 푸터 (액션 버튼) -->
+      <div class="bg-slate-100 p-4 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3 shrink-0 no-print">
+        <div class="flex items-center space-x-2">
+          <!-- PDF / 인쇄 버튼 -->
+          <button onclick="printCurrentModal()" class="px-3.5 py-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 rounded-xl text-xs sm:text-sm font-semibold shadow-sm transition-all flex items-center space-x-1.5">
+            <i class="fa-solid fa-file-pdf text-red-500"></i>
+            <span>상세 공고 PDF 반출 / 인쇄</span>
+          </button>
+        </div>
+
+        <div class="flex items-center space-x-2">
+          <button onclick="closeDetailModal()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-xl text-xs sm:text-sm font-semibold transition-all">
+            닫기
+          </button>
+          <button id="modalActionMatchBtn" onclick="openMatchModalCurrent()" class="px-5 py-2 bg-brand-blue hover:bg-blue-700 text-white rounded-xl text-xs sm:text-sm font-bold shadow-md transition-all flex items-center space-x-1.5">
+            <i class="fa-solid fa-user-plus"></i>
+            <span>인턴처 매칭 신청</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- [모달 2] 실시간 참여자 매칭 신청 모달 -->
+  <div id="matchModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 modal-backdrop">
+    <div class="modal-content bg-white w-full max-w-lg rounded-2xl shadow-2xl border border-slate-200 overflow-hidden">
+      <div class="bg-brand-blue p-5 text-white flex items-center justify-between">
+        <div class="flex items-center space-x-2">
+          <i class="fa-solid fa-user-check text-xl"></i>
+          <h3 class="text-base sm:text-lg font-bold">인턴처 매칭 신청</h3>
+        </div>
+        <button onclick="closeMatchModal()" class="text-white/80 hover:text-white p-1 text-xl">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form id="matchForm" onsubmit="submitMatch(event)" class="p-6 space-y-4 text-xs sm:text-sm">
+        <div class="bg-blue-50 p-3.5 rounded-xl border border-blue-100 text-xs">
+          <span class="text-slate-500 block">신청 대상 인턴처:</span>
+          <strong id="matchModalTargetCompany" class="text-slate-900 text-sm font-bold block mt-0.5">-</strong>
+          <span id="matchModalTargetInternType" class="text-brand-blue font-medium mt-0.5 block">-</span>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">
+            참여자 성명 <span class="text-red-500">*</span>
+          </label>
+          <input type="text" id="matchParticipantName" required placeholder="예: 홍길동" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:bg-white focus:border-brand-blue focus:ring-1 focus:ring-brand-blue">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">
+            소속 기관 (지역자활센터명) <span class="text-red-500">*</span>
+          </label>
+          <input type="text" id="matchOrgName" required placeholder="예: 서울강북지역자활센터, 대구북구지역자활센터 등" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:bg-white focus:border-brand-blue focus:ring-1 focus:ring-brand-blue">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">
+            연락처 (선택)
+          </label>
+          <input type="tel" id="matchPhone" placeholder="010-0000-0000" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:bg-white focus:border-brand-blue focus:ring-1 focus:ring-brand-blue">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">
+            특이사항 및 메모 (선택)
+          </label>
+          <textarea id="matchMemo" rows="2" placeholder="자격증 보유 여부, 출퇴근 가능 여부 등" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:bg-white focus:border-brand-blue focus:ring-1 focus:ring-brand-blue"></textarea>
+        </div>
+
+        <div class="pt-2 flex items-center justify-end space-x-2 border-t border-slate-100">
+          <button type="button" onclick="closeMatchModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg font-semibold transition-all">
+            취소
+          </button>
+          <button type="submit" class="px-5 py-2 bg-brand-blue hover:bg-blue-700 text-white rounded-lg font-bold shadow-md transition-all flex items-center space-x-1.5">
+            <i class="fa-solid fa-check"></i>
+            <span>매칭 등록 완료</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- [모달 3] Q&A 새 질문 등록 모달 -->
+  <div id="qnaModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 modal-backdrop">
+    <div class="modal-content bg-white w-full max-w-lg rounded-2xl shadow-2xl border border-slate-200 overflow-hidden">
+      <div class="bg-slate-900 p-5 text-white flex items-center justify-between">
+        <h3 class="text-base sm:text-lg font-bold">인턴처 문의 작성</h3>
+        <button onclick="closeQnaModal()" class="text-white/80 hover:text-white p-1 text-xl">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form id="qnaForm" onsubmit="submitQna(event)" class="p-6 space-y-4 text-xs sm:text-sm">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">작성자 (성명 및 소속) <span class="text-red-500">*</span></label>
+          <input type="text" id="qnaAuthor" required placeholder="예: 김*수 (서울지역자활센터)" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:bg-white focus:border-brand-blue">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">문의 제목/질문 내용 <span class="text-red-500">*</span></label>
+          <textarea id="qnaQuestion" rows="4" required placeholder="궁금하신 점을 자세히 작성해주시면 관리자가 확인 후 답변드립니다." class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:bg-white focus:border-brand-blue"></textarea>
+        </div>
+        <div class="pt-2 flex items-center justify-end space-x-2 border-t border-slate-100">
+          <button type="button" onclick="closeQnaModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg font-semibold">취소</button>
+          <button type="submit" class="px-5 py-2 bg-brand-blue hover:bg-blue-700 text-white rounded-lg font-bold shadow-md">등록하기</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- [모달 4] 공지사항 상세 모달 -->
+  <div id="noticeDetailModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 modal-backdrop">
+    <div class="modal-content bg-white w-full max-w-2xl rounded-2xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[85vh]">
+      <div class="bg-slate-900 p-5 text-white flex items-center justify-between shrink-0">
+        <h3 id="noticeModalTitle" class="text-base sm:text-lg font-bold truncate">공지사항 제목</h3>
+        <button onclick="closeNoticeModal()" class="text-white/80 hover:text-white p-1 text-xl">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="p-6 overflow-y-auto space-y-4 text-xs sm:text-sm flex-1">
+        <div class="flex items-center justify-between text-xs text-slate-500 pb-3 border-b border-slate-100">
+          <div><span class="font-medium">작성자:</span> <span id="noticeModalAuthor">한국자활복지개발원</span></div>
+          <div><span class="font-medium">등록일:</span> <span id="noticeModalDate">-</span> | <span id="noticeModalViews">0</span>회 조회</div>
+        </div>
+        <div id="noticeModalContent" class="text-slate-800 leading-relaxed whitespace-pre-line py-2">
+          공지 내용
+        </div>
+      </div>
+      <div class="bg-slate-50 p-4 border-t border-slate-100 text-right shrink-0">
+        <button onclick="closeNoticeModal()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg font-semibold text-xs sm:text-sm">
+          닫기
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 스크립트 로드 순서: 초기 데이터셋 -> 스토어 -> 페이지 메인 로직 -->
+  <script src="js/initialData.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
